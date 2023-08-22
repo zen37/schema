@@ -2,9 +2,9 @@
 require_once 'config.php';
 
 // Define parameters
-$databasePattern = 'infawork_company_7%';
+$databasePattern = 'infawork_company%';
 $listDatabases = true; // Set to true to list databases
-$performUpdates = true; // Set to true to perform updates
+$performUpdates = false; // Set to true to perform updates
 $targetDatabase = "ALL"; // Set to "ALL" to update all databases
 $alterQuery = "ALTER TABLE infa_accounting_ap_automation ADD COLUMN new_field CHAR(1)";
 //$alterQuery = "ALTER TABLE infa_accounting_ap_automation DROP COLUMN new_field";
@@ -38,8 +38,9 @@ if ($performUpdates && $targetDatabase === "ALL") {
     $result = $conn->query($sql);
 
     if ($result) {
-        while ($row = $result->fetch_assoc()) {
-            $dbName = $row["Database"];
+        $databaseNames = $result->fetch_all();
+        foreach ($databaseNames as $database) {
+            $dbName = $database[0];
 
             // Connect to the specific database
             $dbConn = new mysqli($servername, $username, $password, $dbName);
