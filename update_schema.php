@@ -32,6 +32,10 @@ if ($performUpdates && $targetDatabase === "ALL") {
 
     if ($result) {
         $databaseNames = $result->fetch_all();
+
+        //initialize a flag to track the success of updates
+        $allUpdatesSuccessful = true;
+
         foreach ($databaseNames as $database) {
             $dbName = $database[0];
 
@@ -42,15 +46,22 @@ if ($performUpdates && $targetDatabase === "ALL") {
                 die("Connection failed: " . $dbConn->connect_error);
             }
 
-            // Add a new field to the table 'infa_accounting_ap_automation'
-          //  $alterQuery = "ALTER TABLE infa_accounting_ap_automation ADD COLUMN new_field CHAR(1)";
+            // Begin a transaction
+            $dbConn->autocommit(false);
 
             if ($dbConn->query($alterQuery) === TRUE) {
-                echo "$dbName: $alterQuery\n";
+                echo "SUCCESS|" .  $dbName . "|" . $alterQuery . "\n";
             } else {
-                echo $dbConn->error . ". $alterQuery\n";
+                echo "FAIL|" .  $dbName . "|" . $alterQuery . "|" . $dbConn->error . "\n";
+                $allUpdatesSuccessful = false;
             }
 
+            // Commit or rollback based on overall success
+            if ($allUpdatesSuccessful) {
+                $dbConn->commit();
+            } else {
+                $dbConn->rollback();
+            }
 
             $dbConn->close();
         }
