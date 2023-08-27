@@ -1,24 +1,11 @@
 <?php
 require_once 'connection.php';
 require_once 'parameters.php';
+require_once 'functions.php';
 
-// Call the function to establish a database connection
 $conn = connectToDatabase($servername, $username, $password);
 
-if ($listDatabases) {
-    // List databases based on the provided pattern
-    $sql = "SHOW DATABASES LIKE '$databasePrefix'";
-    $result = $conn->query($sql);
-
-    if ($result) {
-        $databaseNames = $result->fetch_all();
-        foreach ($databaseNames as $database) {
-            echo $database[0] . "\n";
-        }
-    } else {
-        echo "Query failed: " . $conn->error;
-    }
-}
+listDatabases($databasePrefix, $conn);
 
 if ($performUpdates && $targetDatabase === "ALL") {
     // Get a list of databases based on the provided pattern

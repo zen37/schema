@@ -1,7 +1,7 @@
 <?php
 // Define parameters
 $test = true;
-$databasePrefix = 'infawork_company_7%';
+$databasePrefix = 'infawork_company_';
 $targetDatabase = array(1, 5, 6);
 $listDatabases = true; // Set to true to list databases
 $performUpdates = false; // Set to true to perform updates
