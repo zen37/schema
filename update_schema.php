@@ -2,17 +2,12 @@
 require_once 'connection.php';
 require_once 'parameters.php';
 
-// Create connection
-$conn = new mysqli($servername, $username, $password);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+// Call the function to establish a database connection
+$conn = connectToDatabase($servername, $username, $password);
 
 if ($listDatabases) {
     // List databases based on the provided pattern
-    $sql = "SHOW DATABASES LIKE '$databasePattern'";
+    $sql = "SHOW DATABASES LIKE '$databasePrefix'";
     $result = $conn->query($sql);
 
     if ($result) {
@@ -27,7 +22,7 @@ if ($listDatabases) {
 
 if ($performUpdates && $targetDatabase === "ALL") {
     // Get a list of databases based on the provided pattern
-    $sql = "SHOW DATABASES LIKE '$databasePattern'";
+    $sql = "SHOW DATABASES LIKE '$databasePrefix'";
     $result = $conn->query($sql);
 
     if ($result) {
@@ -58,7 +53,9 @@ if ($performUpdates && $targetDatabase === "ALL") {
 
             // Commit or rollback based on overall success
             if ($allUpdatesSuccessful) {
-                $dbConn->commit();
+                if (!$test) {
+                    $dbConn->commit();
+                }
             } else {
                 $dbConn->rollback();
             }
