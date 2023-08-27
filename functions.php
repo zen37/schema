@@ -1,7 +1,7 @@
 <?php
 function listDatabases($databasePrefix, $conn) {
     // List databases based on the provided pattern
-    $sql = "SHOW DATABASES LIKE '$databasePrefix'";
+    $sql = "SHOW DATABASES LIKE '$databasePrefix%'";
     $result = $conn->query($sql);
 
     if ($result) {
