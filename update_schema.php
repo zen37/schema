@@ -1,7 +1,4 @@
 <?php
-require_once 'connection.php';
-require_once 'parameters.php';
-require_once 'functions.php';
 
 if ($test) {
     echo "TEST parameter is on.\n";

@@ -23,6 +23,15 @@ function connectToDatabase($servername, $username, $password, $dbName) {
 
 }
 
+function targetDatabasesCheck($targetDatabase) {
+
+}
+
+
+function ignoreDatabasesCheck($ignoreDatabase) {
+
+}
+
 
 function listDatabases($databasePrefix, $conn) {
     // List databases based on the provided pattern
