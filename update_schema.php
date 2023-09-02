@@ -8,8 +8,9 @@ if ($test) {
 }
 
 $conn = connectToServer($servername, $username, $password);
-
-listDatabases($databasePrefix, $conn);
+ if ($listDatabases)  {
+    listDatabases($databasePrefix, $conn);
+ }
 
 if ($performUpdates && $targetDatabase === "ALL") {
     updateDatabases($databasePrefix, $alterQuery, $conn, $servername,  $username, $password, $test);

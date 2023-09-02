@@ -1,13 +1,28 @@
 <?php
 
 function connectToServer($servername, $username, $password) {
+
     $conn = new mysqli($servername, $username, $password);
 
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
+
     return $conn;
 }
+
+function connectToDatabase($servername, $username, $password, $dbName) {
+
+    $dbConn = new mysqli($servername, $username, $password, $dbName);
+
+    if ($dbConn->connect_error) {
+        die("Connection failed: " . $dbConn->connect_error);
+    }
+
+    return $dbConn;
+
+}
+
 
 function listDatabases($databasePrefix, $conn) {
     // List databases based on the provided pattern
@@ -37,13 +52,8 @@ function updateDatabases($databasePrefix, $alterQuery, $conn, $servername, $user
 
         foreach ($databaseNames as $database) {
             $dbName = $database[0];
-            $dbConn = new mysqli($servername, $username, $password, $dbName);
 
-            if ($dbConn->connect_error) {
-                die("Connection failed: " . $dbConn->connect_error);
-            }
-
-            // Begin a transaction
+            $dbConn=connectToDatabase($servername, $username, $password, $dbName);
             $dbConn->autocommit(false);
 
             if ($dbConn->query($alterQuery) === TRUE) {
@@ -53,13 +63,13 @@ function updateDatabases($databasePrefix, $alterQuery, $conn, $servername, $user
                 $allUpdatesSuccessful = false;
             }
 
-            // Commit or rollback based on overall success
             if ($allUpdatesSuccessful && !$test) {
+                echo "commiting\n";
                 $dbConn->commit();
             } else {
+                echo "rollback\n";
                 $dbConn->rollback();
             }
-
                $dbConn->close();
         }
     } else {
