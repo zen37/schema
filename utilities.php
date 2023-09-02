@@ -1,16 +1,17 @@
 <?php
 function printVariablesFromFile($filePath) {
+    echo 'PARAMETERS for ... ';
     if (file_exists($filePath)) {
         include($filePath);
 
         foreach (get_defined_vars() as $name => $value) {
             echo "$name: ";
             if (is_bool($value)) {
-                echo $value ? 'true' : 'false'; // Handle boolean values
+                echo $value ? 'true' : 'false'; // handle boolean values
             } elseif (is_array($value)) {
-                echo implode(', ', $value); // Print array values as a comma-separated list
+                echo implode(', ', $value); // print array values as a comma-separated list
             } else {
-                echo $value; // Print other types as-is
+                echo $value; // print other types as-is
             }
             echo "\n";
         }

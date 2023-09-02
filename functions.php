@@ -43,22 +43,16 @@ function getDatabasesWithPrefix($conn) {
 function databaseCheckMissing($conn, $databases) {
 
     $matchingDatabases = getDatabasesWithPrefix($conn);
-
     $missingDatabases = array_diff($databases, $matchingDatabases);
-
     return $missingDatabases;
 
 }
 
 
-function ignoreDatabasesCheck($ignoreDatabase) {
-
-}
 
 function databaseNamePrefixId($databaseIDs) {
 
     global $databasePrefix;
-
     $db = [];
 
     foreach ($databaseIDs as $id) {
@@ -84,41 +78,24 @@ function listDatabases($databasePrefix, $conn) {
     }
 }
 
-function updateDatabases($databasePrefix, $alterQuery, $conn, $servername, $username, $password, $test) {
-    // Get a list of databases based on the provided pattern
-    $sql = "SHOW DATABASES LIKE '$databasePrefix%'";
-    $result = $conn->query($sql);
-
-    if ($result) {
-        $databaseNames = $result->fetch_all();
-
-        // Initialize a flag to track the success of updates
-        $allUpdatesSuccessful = true;
-
-        foreach ($databaseNames as $database) {
-            $dbName = $database[0];
-
-            $dbConn=connectToDatabase($servername, $username, $password, $dbName);
-            $dbConn->autocommit(false);
+function updateDatabases($databases, $alterQuery, $conn, $servername, $username, $password, $test) {
+        foreach ($databases as $db) {
+            $dbConn=connectToDatabase($servername, $username, $password, $db);
 
             if ($dbConn->query($alterQuery) === TRUE) {
-                echo "SUCCESS|$dbName|$alterQuery\n";
+                echo "SUCCESS|$db|$alterQuery\n";
             } else {
-                echo "FAIL|$dbName|$alterQuery|" . $dbConn->error . "\n";
-                $allUpdatesSuccessful = false;
+                echo "FAIL|$db|$alterQuery|" . $dbConn->error . "\n";
+                die('stopping here');
             }
 
-            if ($allUpdatesSuccessful && !$test) {
-                echo "commiting\n";
-                $dbConn->commit();
-            } else {
-                echo "rollback\n";
-                $dbConn->rollback();
-            }
-               $dbConn->close();
+            $dbConn->close();
         }
-    } else {
-        echo "Query failed: " . $conn->error;
-    }
 }
+
+function stringContains($haystack, $needle) {
+    return strpos($haystack, $needle) !== false;
+}
+
+
 ?>

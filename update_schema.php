@@ -7,9 +7,11 @@ printVariablesFromFile('parameters.php');
 
 $conn = connectToServer($servername, $username, $password);
 
+// *** START initial checks ***
 
-if (!$updateAllDatabases) {
-// only if we do not update all the databases we check about missing target databases
+// target databases
+if (!$UPDATE_ALL_DATABASES) {
+// only if we do NOT update all the databases we check about missing target databases
 
     $db = databaseNamePrefixId($targetDatabase);
     $missingDatabases = databaseCheckMissing($conn, $db);
@@ -21,8 +23,9 @@ if (!$updateAllDatabases) {
     }
 }
 
-if ($updateAllDatabases) {
-// only if update all the databases we check about missing ignore databases
+// ignore databases
+if ($UPDATE_ALL_DATABASES) {
+// only if we update ALL the databases we check about missing ignore databases
 
     $db = databaseNamePrefixId($ignoreDatabase);
     $missingDatabases = databaseCheckMissing($conn, $db);
@@ -34,6 +37,19 @@ if ($updateAllDatabases) {
     }
 }
 
+//alter  query
+if(!$ALLOW_DROP_COLUMN ) {
+//if we are not allowed to drop column check whether it is present
+    if (stringContains($alterQuery, 'DROP COLUMN')) {
+        die("Settings do not allow DROP COLUMN");
+    }
+}
+// *** END initial checks ***
+
+if (!$UPDATE_ALL_DATABASES && !empty($targetDatabase)) {
+    $db = databaseNamePrefixId($targetDatabase);
+    updateDatabases($db, $alterQuery, $conn, $servername,  $username, $password, $test);
+}
 
 exit(0);
 
