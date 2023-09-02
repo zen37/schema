@@ -23,13 +23,53 @@ function connectToDatabase($servername, $username, $password, $dbName) {
 
 }
 
-function targetDatabasesCheck($targetDatabase) {
+function getDatabasesWithPrefix($conn) {
+
+    global $databasePrefix;
+
+    echo "databasePrefix is " . "$databasePrefix\n";
+
+    $sql = "SHOW DATABASES LIKE '$databasePrefix%'";
+    $result = $conn->query($sql);
+
+    if ($result) {
+        $databaseNames = $result->fetch_all();
+        $databases = [];
+        foreach ($databaseNames as $database) {
+            $databases[] = $database[0];
+        }
+        return $databases;
+    } else {
+        return null;
+    }
+}
+
+function databaseCheckMissing($conn, $databases) {
+
+    $matchingDatabases = getDatabasesWithPrefix($conn);
+
+    $missingDatabases = array_diff($databases, $matchingDatabases);
+
+    return $missingDatabases;
 
 }
 
 
 function ignoreDatabasesCheck($ignoreDatabase) {
 
+}
+
+function databaseNamePrefixId($databaseIDs) {
+
+    global $databasePrefix;
+
+    $db = [];
+
+    foreach ($databaseIDs as $id) {
+        $db[] = $databasePrefix . $id;
+    }
+
+    return $db;
 }
 
 

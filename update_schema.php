@@ -1,10 +1,24 @@
 <?php
 
-if ($test) {
-    echo "TEST parameter is on.\n";
-}
+require_once("includes_update_schema.php");
+
+//if ($test) {
+//    echo "TEST parameter is on.\n";
+//}
 
 $conn = connectToServer($servername, $username, $password);
+
+$db = databaseNamePrefixId($targetDatabase);
+$missingDatabases = databaseCheckMissing($conn, $db);
+
+if (!empty($missingDatabases)) {
+    die("Databases missing in target, stopping here: " . implode(", ", $missingDatabases));
+} else {
+    echo "All target databases are present in the fetched databases.";
+}
+
+exit(0);
+
  if ($listDatabases)  {
     listDatabases($databasePrefix, $conn);
  }
