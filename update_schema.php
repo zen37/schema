@@ -39,7 +39,7 @@ if ($UPDATE_ALL_DATABASES) {
 
 //alter  query
 if(!$ALLOW_DROP_COLUMN ) {
-//if we are not allowed to drop column check whether it is present
+//if we are not allowed to drop column, check whether it is present
     if (stringContains($alterQuery, 'DROP COLUMN')) {
         die("Settings do not allow DROP COLUMN");
     }
@@ -51,41 +51,10 @@ if (!$UPDATE_ALL_DATABASES && !empty($targetDatabase)) {
     updateDatabases($db, $alterQuery, $conn, $servername,  $username, $password, $test);
 }
 
-exit(0);
 
  if ($listDatabases)  {
     listDatabases($databasePrefix, $conn);
  }
-
-if ($performUpdates && $targetDatabase === "ALL") {
-    updateDatabases($databasePrefix, $alterQuery, $conn, $servername,  $username, $password, $test);
-} elseif ($performUpdates && $targetDatabase !== "ALL") {
-    // Check if the target database exists
-    $sql = "SHOW DATABASES LIKE '$targetDatabase'";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows === 1) {
-        $dbName = $targetDatabase;
-        // Connect to the specific database
-        $dbConn = new mysqli($servername, $username, $password, $dbName);
-
-        if ($dbConn->connect_error) {
-            die("Connection failed: " . $dbConn->connect_error);
-        }
-
-        // Add a new field to the table 'infa_accounting_ap_automation'
-
-        if ($dbConn->query($alterQuery) === TRUE) {
-            echo "$dbName: $alterQuery\n";
-        } else {
-            echo $dbConn->error . ". $alterQuery\n";
-        }
-
-        $dbConn->close();
-    } else {
-        echo "Database '$targetDatabase' not found.\n";
-    }
-}
 
 $conn->close();
 ?>
