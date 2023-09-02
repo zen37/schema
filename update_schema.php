@@ -9,7 +9,8 @@ $conn = connectToServer($servername, $username, $password);
 
 
 if (!$updateAllDatabases) {
-// only if we do not update all the databases we check about mssing target databases
+// only if we do not update all the databases we check about missing target databases
+
     $db = databaseNamePrefixId($targetDatabase);
     $missingDatabases = databaseCheckMissing($conn, $db);
 
@@ -21,7 +22,7 @@ if (!$updateAllDatabases) {
 }
 
 if ($updateAllDatabases) {
-// only if we do not update all the databases we check about mssing target databases
+// only if update all the databases we check about missing ignore databases
 
     $db = databaseNamePrefixId($ignoreDatabase);
     $missingDatabases = databaseCheckMissing($conn, $db);
@@ -32,6 +33,8 @@ if ($updateAllDatabases) {
         echo "All ignore databases are present\n";
     }
 }
+
+
 exit(0);
 
  if ($listDatabases)  {
