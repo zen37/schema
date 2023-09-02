@@ -5,6 +5,6 @@ $listDatabases = false; // Set to true to list databases
 $alterQuery = "ALTER TABLE infa_accounting_ap_automation ADD COLUMN new_field CHAR(1)";
 //$alterQuery = "ALTER TABLE infa_accounting_ap_automation DROP COLUMN new_field";
 
-$targetDatabase = [70, 4, 5];
-$ignoreDatabase = [1, 2, 3];
+$targetDatabase = [70, 71, 69];
+$ignoreDatabase = [64, 689];
 ?>

@@ -2,21 +2,36 @@
 
 require_once("includes_update_schema.php");
 
-//if ($test) {
-//    echo "TEST parameter is on.\n";
-//}
+printVariablesFromFile('flags.php');
+printVariablesFromFile('parameters.php');
 
 $conn = connectToServer($servername, $username, $password);
 
-$db = databaseNamePrefixId($targetDatabase);
-$missingDatabases = databaseCheckMissing($conn, $db);
 
-if (!empty($missingDatabases)) {
-    die("Databases missing in target, stopping here: " . implode(", ", $missingDatabases));
-} else {
-    echo "All target databases are present in the fetched databases.";
+if (!$updateAllDatabases) {
+// only if we do not update all the databases we check about mssing target databases
+    $db = databaseNamePrefixId($targetDatabase);
+    $missingDatabases = databaseCheckMissing($conn, $db);
+
+    if (!empty($missingDatabases)) {
+        die("Missing target databases: " . implode(", ", $missingDatabases));
+    } else {
+        echo "All target databases are present\n";
+    }
 }
 
+if ($updateAllDatabases) {
+// only if we do not update all the databases we check about mssing target databases
+
+    $db = databaseNamePrefixId($ignoreDatabase);
+    $missingDatabases = databaseCheckMissing($conn, $db);
+
+    if (!empty($missingDatabases)) {
+        die("Missing ignore databases: " . implode(", ", $missingDatabases));
+    } else {
+        echo "All ignore databases are present\n";
+    }
+}
 exit(0);
 
  if ($listDatabases)  {

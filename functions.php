@@ -25,10 +25,6 @@ function connectToDatabase($servername, $username, $password, $dbName) {
 
 function getDatabasesWithPrefix($conn) {
 
-    global $databasePrefix;
-
-    echo "databasePrefix is " . "$databasePrefix\n";
-
     $sql = "SHOW DATABASES LIKE '$databasePrefix%'";
     $result = $conn->query($sql);
 
