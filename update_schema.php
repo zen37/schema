@@ -44,6 +44,14 @@ if(!$ALLOW_DROP_COLUMN ) {
         die("Settings do not allow DROP COLUMN");
     }
 }
+
+if(!$ALLOW_DROP_TABLE ) {
+    //if we are not allowed to drop table, check whether it is present
+        if (stringContains($alterQuery, 'DROP TABLE')) {
+            die("Settings do not allow DROP TABLE");
+        }
+}
+
 // *** END initial checks ***
 
 if (!$UPDATE_ALL_DATABASES && !empty($targetDatabase)) {
