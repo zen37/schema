@@ -19,6 +19,7 @@ function connectToDatabase($servername, $username, $password, $dbName) {
 }
 
 function getDatabasesWithPrefix($conn) {
+    global $databasePrefix;
     $sql = "SHOW DATABASES LIKE '$databasePrefix%'";
     $result = $conn->query($sql);
 
@@ -43,7 +44,6 @@ function databaseCheckMissing($conn, $databases) {
 function databaseNamePrefixId($databaseIDs) {
     global $databasePrefix;
     $db = [];
-
     foreach ($databaseIDs as $id) {
         $db[] = $databasePrefix . $id;
     }
