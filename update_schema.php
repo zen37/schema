@@ -51,6 +51,7 @@ if (!isset($alterQuery)) {
 if(!$ALLOW_DROP_COLUMN ) {
 //if we are not allowed to drop column, check whether it is present
     if (stringContains($alterQuery, 'DROP COLUMN')) {
+        logMsg("ERROR|Settings do not allow DROP COLUMN", $conn);
         die("Settings do not allow DROP COLUMN");
     }
 }

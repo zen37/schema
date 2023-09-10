@@ -20,4 +20,24 @@ function printVariablesFromFile($filePath) {
     }
     echo "\n";
 }
+
+
+function logMsg($msg, $conn) {
+
+    error_log($msg);
+
+    /*
+    $query = "CALL sys.syslog('LOG', '$msg')";
+
+    $result = mysqli_query($conn, $query);
+
+    if (!$result) {
+        echo "Error writing to MySQL error log: " . mysqli_error($conn);
+    } else {
+        echo "Custom log message added to MySQL error log.";
+    }
+    */
+}
+
+
 ?>
